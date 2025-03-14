@@ -2,10 +2,15 @@
   "name": "aws-examples",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    
-  },
+  "scripts": {},
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.767.0",
+    "@aws-sdk/client-lambda": "^3.758.0",
+    "@aws-sdk/client-s3": "^3.758.0",
+    "aws-sdk": "^2.1692.0",
+    "dotenv": "^16.4.7"
+  }
 }

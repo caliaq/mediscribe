@@ -1,11 +1,13 @@
 import Doctor from "../models/doctor";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 interface Doctor {
   credentials: {
     username: string;
     password: string;
   };
+  _id: string;
 }
 
 const auth = async (username: string, password: string) => {
@@ -20,10 +22,19 @@ const auth = async (username: string, password: string) => {
   const { password: doctorPassword } = doctor.credentials;
 
   const isMatch = await bcrypt.compare(password, doctorPassword);
-  console.log(password, doctorPassword, isMatch);
+
   if (!isMatch) {
     throw new Error("invalid password");
   }
+  return jwt.sign({ doctorId: doctor._id }, process.env.SESSION_SECRET!, {
+    expiresIn: "60d",
+  });
+};
+
+const verify = async (token: string) => {
+  const doctor = jwt.verify(token, process.env.SESSION_SECRET!, {
+    ignoreExpiration: false,
+  });
   return doctor;
 };
 
@@ -56,6 +67,7 @@ const deleteDoctor = async (id: string) => {
 
 export default {
   auth,
+  verify,
   getDoctors,
   getDoctor,
   createDoctor,

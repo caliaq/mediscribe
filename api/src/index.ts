@@ -1,17 +1,18 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { connect } from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
 import morgan from "morgan";
 import cors from "cors";
-import session from "express-session";
-
+import cookieParser from "cookie-parser";
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 import errorHandler from "./middleware/errorHandler";
 import patientsRouter from "./routes/patients";
 import recordingsRouter from "./routes/recordings";
 import authRouter from "./routes/auth";
+import doctorsRouter from "./routes/doctors";
+import authHandler from "./middleware/authHandler";
 
 const port = process.env.PORT || 4000;
 const mongodbUri = process.env.MONGODB_URI;
@@ -23,15 +24,13 @@ if (!mongodbUri) {
 const app = express();
 app.use(express.json({ limit: "100MB" }));
 app.use(morgan("dev"));
-app.use(cors());
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET!,
-    name: "sId",
-    saveUninitialized: false,
-    resave: false,
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
   })
 );
+app.use(cookieParser());
 
 app.use("/api/v2/auth", authRouter);
 

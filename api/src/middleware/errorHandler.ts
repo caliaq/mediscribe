@@ -7,7 +7,5 @@ export default (
   next: NextFunction
 ) => {
   console.error(err.stack);
-  res
-    .status(500)
-    .json({ success: false, data: { message: "something went wrong!" } });
+  res.json({ success: false, data: { message: "something went wrong!" } });
 };

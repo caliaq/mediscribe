@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { PatientProvider } from "../context/patientContext";
+import { AuthProvider } from "../context/authContext";
 
 
 const outfit = Outfit({
@@ -16,15 +17,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="cs">
+    <html lang="en">
       <body className={`${outfit.variable} antialiased`}>
-        <PatientProvider>
-          {children}
-        </PatientProvider>
+        <AuthProvider>
+          <PatientProvider>
+            {children}
+          </PatientProvider>
+        </AuthProvider>
       </body>
     </html>
   );

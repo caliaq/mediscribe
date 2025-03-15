@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import { connect } from "mongoose";
 import dotenv from "dotenv";
 import path from "path";

@@ -1,73 +1,54 @@
-import Config from '../domain/config';
-import newConfig from './config';
-import express from 'express';
-import CORS from 'cors';
-import { ListBucketsCommand } from '@aws-sdk/client-s3';
-import MainRouter from './router';
-import { KkyClient } from '../infrastructure/kky/kkyClient';
-import { AwsClient } from '../infrastructure/aws/awsClient';
+import Config from "../domain/config.js";
+import newConfig from "./config.js";
+import express from "express";
+import cors from "cors";
+import MainRouter from "./router.js";
+import { KkyClient } from "../infrastructure/kky/kkyClient.js";
+import { AwsClient } from "../infrastructure/aws/awsClient.js";
 
 class Application {
-    public config: Config;
-    public app: express.Application = express();
-    public awsClient: AwsClient;
-    public kkyClient: KkyClient;
+  public config!: Config;
+  public app: express.Application;
+  public awsClient: AwsClient;
+  public kkyClient!: KkyClient;
 
-    constructor(envType: string) {
-        this.config = newConfig(envType);
+  private constructor(config: Config) {
+    this.config = config;
+    this.app = express();
+    this.awsClient = new AwsClient();
+    this.kkyClient = new KkyClient(this.config);
+    this.setupExpress();
+  }
 
-        // Inicializace AWS klienta a otestování spojení s AWS S3
-        this.awsClient = new AwsClient(this.config);
-        this.pingAws().then((message: string) => {
-            console.log(message);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
+  public static async create(envType: string): Promise<Application> {
+    const config = await newConfig(envType);
+    return new Application(config);
+  }
 
-        // Inicializace KKY klienta a otestování spojení s KKY API
-        this.kkyClient = new KkyClient(this.config);
-        this.pingKky().then((message: string) => {
-            console.log(message);
-        }).catch((error: Error) => {
-            console.error(error);
-        });
-        
-        // Inicializace aplikace
-        this.app.use(express.json());
-        this.app.use(CORS());
+  private async pingKky(): Promise<void> {
+    try {
+      const result = await this.kkyClient.ping();
+      console.log(`✅ Connected to KKY API: ${result}`);
+    } catch (error: any) {
+      console.error("❌ Error connecting to KKY API:", error);
     }
+  }
 
-    private async pingAws(): Promise<string> {
-        try {
-            const client = this.awsClient.getClient();
-            const command = new ListBucketsCommand({});
-            const response = await client.send(command);
-            return 'Connected to AWS S3. Buckets: ' + JSON.stringify(response.Buckets);
-        } catch (error: any) {
-            throw new Error('Error connecting to AWS S3: ' + error.message);
-        }
-    }
+  private setupExpress(): void {
+    this.app.use(express.json());
+    this.app.use(cors());
+  }
 
-    private async pingKky(): Promise<string> {
-        try {
-          const result = await this.kkyClient.ping();
-          return 'Connected to KKY API: ' + result;
-        } catch (error: any) {
-          throw new Error('Error connecting to KKY API: ' + error.message);
-        }
-      }
+  public run(): void {
+    const mainRouter: MainRouter = new MainRouter(this.config);
+    this.app.use("/api/v2", mainRouter.run());
 
-    // Spuštění aplikace
-    run() {
-        // Předpokládáme, že MainRouter nyní pracuje s awsClient, případně lze předat i kkyClient
-        const mainRouter: MainRouter = new MainRouter(this.config, this.awsClient, this.kkyClient);
+    this.app.listen(this.config.server.port, () => {
+      console.log(`🚀 Server běží na portu ${this.config.server.port}`);
+    });
 
-        this.app.use('/api/v2', mainRouter.run());
-
-        this.app.listen(this.config.server.port, () => {
-            console.log(`Server běží na portu ${this.config.server.port}`);
-        });
-    }
+    this.pingKky();
+  }
 }
 
 export default Application;

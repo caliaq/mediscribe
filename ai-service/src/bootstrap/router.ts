@@ -1,33 +1,21 @@
-import * as express from 'express';
-import Config from '../domain/config';
-// import ControllerAuth from '../controller/authController';
-import { AwsClient } from '../infrastructure/aws/awsClient';
-import { KkyClient } from '../infrastructure/kky/kkyClient';
-import ProcessController from '../controllers/processController';
+import express from 'express';
+import { ProcessController } from '../controllers/processAudioController.js';
+import Config from '../domain/config.js';
 
 class MainRouter {
-    public router: express.Router;
-    public config: Config;
-    public awsClient: AwsClient;
-    public kkyCient: KkyClient;
+  public router: express.Router;
+  public config: Config;
 
-    constructor(config: Config, awsClient: AwsClient, kkyClient: KkyClient) {
-        this.router = express.Router();
+  constructor(config: Config) {
+    this.router = express.Router();
+    this.config = config;
+  }
 
-        this.config = config;
-        this.awsClient = awsClient;
-        this.kkyCient = kkyClient;
-    }
-
-    run() {
-        // Initialize the auth controller
-        // var authController: ControllerAuth = new ControllerAuth(this.config, this.awsClient);
-        var processController: ProcessController = new ProcessController(this.config, this.awsClient);
-
-        // authController.routes(this.router, "");
-        return this.router;
-    }
- 
+  run(): express.Router {
+    const processController = new ProcessController(this.config);
+    processController.routes(this.router);
+    return this.router;
+  }
 }
 
 export default MainRouter;

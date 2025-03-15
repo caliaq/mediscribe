@@ -1,4 +1,4 @@
-type Config = {
+export default interface Config {
   server: {
     port: number;
     host: string;
@@ -25,6 +25,4 @@ type Config = {
   services: {
     apiServicePort: number;
   };
-};
-
-export default Config;
+}

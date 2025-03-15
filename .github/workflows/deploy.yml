@@ -25,7 +25,7 @@ jobs:
         run: |
           aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
       
-      - name: Set environment variables
+      - name: Set environment variables for API
         run: |
           echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > api/.env
           echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> api/.env
@@ -34,11 +34,27 @@ jobs:
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> api/.env
           echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> api/.env
 
+      - name: Set environment variables for AI
+        run: |
+          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> ai/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ai/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ai/.env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> ai/.env
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> ai/.env
+          echo "KKY_USERNAME=hackathon2025" >> ai/.env
+          echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai/.env
+
       - name: Build and push API Docker image
         run: |
           docker build -t api ./api
           docker tag api 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+      
+      - name: Build and push AI Docker image
+        run: |
+          docker build -t ai ./ai
+          docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -57,6 +73,9 @@ jobs:
 
             # Pull the Docker image from ECR
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
 
             # Start containers using docker-compose
             docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d
+
+            sudo systemctl restart nginx

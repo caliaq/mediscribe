@@ -10,8 +10,6 @@ export interface Patient {
     // add more properties as needed
 }
 
-const BASE_URL = '/api/v2/patients';
-
 const checkResponse = async (response: Response) => {
     if (!response.ok) {
         const errorText = await response.text();

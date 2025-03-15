@@ -42,17 +42,31 @@ jobs:
           echo "KKY_USERNAME=hackathon2025" >> ai-service/.env
           echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai-service/.env
 
+        #   - name: Set environment variables for administration
+        # run: |
+        #   echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> administration/.env
+       
+
       - name: Build and push API Docker image
         run: |
           docker build -t api ./api
           docker tag api 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+
       
       - name: Build and push AI Docker image
         run: |
           docker build -t ai ./ai-service
           docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+
+      # - name: Build and push Administration Docker image
+      #   run: |
+      #     docker build -t administration ./administration
+      #     docker tag administration 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+      #     docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+      #     docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -72,6 +86,8 @@ jobs:
             # Pull the Docker image from ECR
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+            
+            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
             # Start containers using docker-compose
             docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d

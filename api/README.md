@@ -4,7 +4,17 @@ This is the documentation of the central API. You can find the routes and their 
 
 ## Requirements
 
-This API runs on the Express.js library with mongoose.js integration.
+This API runs on the express.js library with mongoose.js and aws-sdk integration. Run `npm i` to download all dependencies.
+
+### .env
+
+PORT=
+MONGODB_URI=
+AWS_USERNAME=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=
+AWS_BUCKET_NAME=
 
 ## Routes
 

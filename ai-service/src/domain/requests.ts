@@ -1,3 +1,3 @@
 export interface ProcessMp3Request {
-  bucketPath: string;
+  fileKey: string;
 }

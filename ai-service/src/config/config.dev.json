@@ -7,17 +7,19 @@
   "aws": {
     "account": {
       "username": "",
-      "accessKeyId": "",
-      "secretAccessKey": "",
+      "credentials": {
+        "accessKeyId": "",
+        "secretAccessKey": ""
+      },
       "region": "us-west-2"
     },
     "bucket": {
-      "name": ""
+      "name": "mediscribe-bucket"
     }
   },
   "kky": {
-    "username": "",
-    "password": "",
+    "username": "hackathon2025",
+    "password": "pheboa4zeesh4Kie",
     "chatHost": "https://ollama.kky.zcu.cz",
     "ttsHost": "https://speechcloud.kky.zcu.cz:8887",
     "sttUrl": "https://uwebasr.zcu.cz/api/v2/lindat/generic/cs?format=speechcloud_json",

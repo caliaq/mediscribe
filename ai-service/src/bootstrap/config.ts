@@ -1,44 +1,28 @@
-import  Config  from "../domain/config.js";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
-import dotenv from "dotenv";
-import { readFile } from "fs/promises";
+import Config from "../domain/config";
+import { resolve } from "path";
+import * as dotenv from "dotenv";
 
-// Nahrazení __dirname v ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+function getEnv(envType: string) {
+  const envPath = resolve(__dirname, `../../.env`);
 
-async function getEnv(envType: string): Promise<void> {
-  const envPath = resolve(__dirname, "../../.env");
   dotenv.config({ path: envPath });
 }
 
-async function newConfig(envType: string): Promise<Config> {
-  await getEnv(envType);
+function newConfig(envType: string): Config {
+  getEnv(envType);
 
-  const configPath = resolve(__dirname, "../../src/config/config.dev.json");
+  var path = resolve(__dirname, `../../src/config/config.dev.json`);
+  var config = require(path);
 
-  try {
-    // Načtení souboru asynchronně
-    const fileContent = await readFile(configPath, "utf-8");
-    const config: Config = JSON.parse(fileContent);
+  config.aws.account.username = process.env.AWS_ACCOUNT_USERNAME;
+  config.aws.account.credentials.accessKeyId = process.env.AWS_ACCOUNT_ACCESS_KEY_ID;
+  config.aws.account.credentials.secretAccessKey =
+    process.env.AWS_ACCOUNT_SECRET_ACCESS_KEY;
 
-    // Přiřazení environment proměnných do konfigurace
-    config.aws.account.username = process.env.AWS_ACCOUNT_USERNAME || "";
-    config.aws.account.accessKeyId = process.env.AWS_ACCOUNT_ACCESS_KEY_ID || "";
-    config.aws.account.secretAccessKey = process.env.AWS_ACCOUNT_SECRET_ACCESS_KEY || "";
-    config.aws.bucket.name = process.env.AWS_BUCKET_NAME || "";
-    
-    config.kky.username = process.env.KKY_USERNAME || "";
-    config.kky.password = process.env.KKY_PASSWORD || "";
+  config.kky.username = process.env.KKY_USERNAME;
+  config.kky.password = process.env.KKY_PASSWORD;
 
-    console.log(`✅ Konfigurace načtena: ${JSON.stringify(config, null, 2)}`);
-
-    return config;
-  } catch (error) {
-    console.error(`❌ Chyba při načítání konfigurace: ${error}`);
-    throw error;
-  }
+  return config;
 }
 
 export default newConfig;

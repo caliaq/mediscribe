@@ -26,7 +26,7 @@ const addRecording = async (
     const filePath = `recordings/${body.patientId}/${fileName}.${body.fileType}`;
     await s3.addFile(filePath, body.data);
 
-    const request = await axios.post(`${process.env.AI_API_URL}process`, {
+    const request = await axios.post(`${process.env.AI_API_URL!}process`, {
       filePath,
     });
 

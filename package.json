@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "@next/env": "^15.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10"
   }
 }

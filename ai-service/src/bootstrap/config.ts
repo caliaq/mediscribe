@@ -11,7 +11,7 @@ function getEnv(envType: string) {
 function newConfig(envType: string): Config {
   getEnv(envType);
 
-  var path = resolve(__dirname, `../../src/config/config.dev.json`);
+  var path = resolve(__dirname, `../../src/config/config.json`);
   var config = require(path);
 
   if (

@@ -59,13 +59,11 @@ jobs:
           docker build -t ai ./ai-service
           docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
-          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
 
       - name: Build and push Administration Docker image
         run: |
           docker build -t administration ./administration
           docker tag administration 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
-          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
       - name: Deploy to EC2
@@ -86,8 +84,7 @@ jobs:
             # Pull the Docker image from ECR
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
-            
-            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
             # Start containers using docker-compose
             docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d

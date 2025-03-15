@@ -15,8 +15,9 @@ export class ProcessController {
 
   async process(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { fileUrl } = req.body;
-      const correctedText = await this.usecase.execute(fileUrl);
+      const { filePath } = req.body;
+      console.log(filePath)
+      const correctedText = await this.usecase.execute(filePath);
       res.status(200).json({ correctedText });
     } catch (error) {
       next(error);

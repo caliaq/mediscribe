@@ -17,12 +17,16 @@ export class ProcessAudioUseCase {
     // Stažení zvukového souboru z AWS
     const audioBuffer = await this.awsClient.getFile(fileUrl);
 
+    console.log(audioBuffer)
     // Přepis audio souboru na text pomocí KKY
     const transcript = await this.kkyClient.speechToText(audioBuffer);
 
+
+    console.log("transcript: ", transcript)
     // Korektura transkriptu pomocí AWS AI
     const correctedTranscript = await this.awsClient.correctText(transcript);
 
+    console.log(correctedTranscript)
     return correctedTranscript;
   }
 }

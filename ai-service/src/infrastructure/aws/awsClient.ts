@@ -10,30 +10,30 @@ export class AwsClient {
 
   constructor() {
     const { AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME } = process.env;
-
+    console.log(AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME)
     if (!AWS_REGION || !AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || !AWS_BUCKET_NAME) {
       throw new Error('AWS environment variables are missing.');
     }
 
     this.s3Client = new S3Client({
-      region: AWS_REGION,
+      region: "us-west-2",
       credentials: {
-        accessKeyId: AWS_ACCESS_KEY_ID,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY,
+        accessKeyId: "AKIAXREW53MVAB5D3YIV",
+        secretAccessKey: "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",
       },
     });
 
     this.bucketName = AWS_BUCKET_NAME;
   }
 
-  private extractKeyFromPath(bucketPath: string): string {
+  private extractKeyFromPath(bucketPath: string | undefined): string {
     if (!bucketPath) {
       throw new Error("Invalid bucketPath: undefined or empty");
     }
     return bucketPath.replace(/^s3:\/\/[^/]+\//, "").replace(/^https:\/\/[^/]+\//, "");
   }
 
-  async getFile(bucketPath: string): Promise<Buffer> {
+  async getFile(bucketPath: string | undefined): Promise<Buffer> {
     if (!bucketPath) {
       throw new Error("Invalid bucketPath: undefined or empty");
     }
@@ -43,16 +43,20 @@ export class AwsClient {
       throw new Error("Extracted key is empty after processing bucketPath");
     }
 
-    const response = await this.s3Client.send(new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    }));
+    try {
+      const response = await this.s3Client.send(new GetObjectCommand({
+        Bucket: "mediscribe-bucket",
+        Key: key,
+      }));
 
-    if (!response.Body || !(response.Body instanceof Readable)) {
-      throw new Error("Invalid response body from AWS S3.");
+      if (!response.Body) {
+        throw new Error("Invalid response body from AWS S3.");
+      }
+
+      return this.streamToBuffer(response.Body as Readable);
+    } catch (error) {
+      throw new Error(`AWS S3 getFile error: ${error}`);
     }
-
-    return this.streamToBuffer(response.Body);
   }
 
   async correctText(text: string): Promise<string> {

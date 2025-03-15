@@ -82,7 +82,7 @@ jobs:
             fi
 
             # Pull the Docker image from ECR
-            docker login 
+            aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
             # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
             # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
             # # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration

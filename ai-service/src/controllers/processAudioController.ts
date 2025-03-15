@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
-import Config from '../domain/config';
-import { ProcessAudioUseCase } from '../use-case/processAudioUseCase';
+import Config from '../domain/config.js';
+import { ProcessAudioUseCase } from '../use-case/processAudioUseCase.js';
 
 export class ProcessController {
   private config: Config;
@@ -16,10 +16,20 @@ export class ProcessController {
   async process(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { filePath } = req.body;
-      console.log(filePath)
+
+      if (!filePath) {
+        res.status(400).json({ error: 'filePath is required' });
+        return;
+      }
+
+      console.log(`🔄 Processing file: ${filePath}`);
+
       const correctedText = await this.usecase.execute(filePath);
+
+      console.log(`✅ Processed file: ${filePath}`);
       res.status(200).json({ correctedText });
     } catch (error) {
+      console.error(`❌ Error processing file: ${error}`);
       next(error);
     }
   }

@@ -1,5 +1,9 @@
 import express from "express";
 import { connect } from "mongoose";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 import errorHandler from "./middleware/errorHandler";
 import patientsRouter from "./routes/patients";

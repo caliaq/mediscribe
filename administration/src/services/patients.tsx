@@ -41,6 +41,7 @@ export const fetchPatients = async (): Promise<Patient[]> => {
                 return data.data || [];
             }
         }
+        return [];
 
 
     } catch (error) {

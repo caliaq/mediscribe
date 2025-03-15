@@ -1,5 +1,4 @@
 'use client';
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Patients from "@/components/patients";
 import PatientCard from "@/components/patientCard";

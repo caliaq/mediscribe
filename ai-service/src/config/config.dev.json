@@ -2,7 +2,7 @@
   "type": "dev",
   "server": {
     "port": "4100",
-    "host": "localhost"
+    "host": "0.0.0.0"
   },
   "aws": {
     "account": {

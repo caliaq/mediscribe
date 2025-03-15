@@ -4,6 +4,7 @@ import "./globals.css";
 import { PatientProvider } from "../context/patientContext";
 import { AuthProvider } from "../context/authContext";
 
+
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],

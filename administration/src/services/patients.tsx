@@ -68,7 +68,10 @@ export const fetchRecords = async (patientId: string): Promise<Record[]> => {
         console.log(`Fetching records from: ${apiUrl}patients/${patientId}/records`);
 
         const response = await fetch(`${apiUrl}patients/${patientId}/records`, {
-            credentials: 'include',
+            headers:
+            {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

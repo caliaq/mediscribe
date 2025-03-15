@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import s3 from "../services/aws.ts";
+import s3 from "../services/aws";
 
 const addRecording = async (
   req: Request,

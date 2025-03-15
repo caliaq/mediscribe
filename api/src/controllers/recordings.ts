@@ -5,6 +5,12 @@ import dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
+import recordsService from "../services/records";
+
+interface IReq extends Request {
+  doctorId: string;
+}
+
 const addRecording = async (
   req: Request,
   res: Response,
@@ -20,8 +26,17 @@ const addRecording = async (
     const filePath = `recordings/${body.patientId}/${fileName}.${body.fileType}`;
     await s3.addFile(filePath, body.data);
 
-    await axios.post(`${process.env.AI_API_URL}process`, {
+    const request = await axios.post(`${process.env.AI_API_URL}process`, {
       filePath,
+    });
+
+    const { correctedText } = request.data;
+
+    await recordsService.createRecord({
+      patientId: body.patientId,
+      data: correctedText,
+      doctorId: (req as IReq).doctorId,
+      summary: "To do",
     });
 
     res.json({ success: true });

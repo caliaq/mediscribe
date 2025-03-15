@@ -26,10 +26,16 @@ const deleteRecord = async (id: string) => {
   await Record.findByIdAndDelete(id);
 };
 
+const getRecordsByDoctor = async (patientId: string) => {
+  const records = await Record.find({ patientId });
+  return records;
+};
+
 export default {
   getRecords,
   getRecord,
   createRecord,
   updateRecord,
   deleteRecord,
+  getRecordsByDoctor,
 };

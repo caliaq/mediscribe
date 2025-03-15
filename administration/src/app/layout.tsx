@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { PatientProvider } from "../context/patientContext";
 
+
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],

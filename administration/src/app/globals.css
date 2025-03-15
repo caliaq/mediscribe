@@ -9,10 +9,12 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-outfit: var(--font-outfit);
+
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Outfit";
+
 }

@@ -1,0 +1,49 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Next.js
+.next/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Build outputs
+dist/
+*.log
+
+# Environment variables
+.env*
+
+# Logs
+logs/
+*.log
+
+# Prisma
+prisma/.dev.db
+prisma/migrations/
+
+# Docker
+.dockerignore
+Dockerfile
+.docker/
+
+# Kubernetes
+k8s/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Editor backups
+*.swp
+*.swo
+*.bak
+
+# Miscellaneous
+.idea/
+*.iml

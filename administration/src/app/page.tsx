@@ -12,6 +12,7 @@ export default function Home() {
       <div className="flex w-4/5">
         <PatientCard></PatientCard>
       </div>
+
     </div>
   );
 }

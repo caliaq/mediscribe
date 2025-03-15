@@ -25,6 +25,7 @@ logs/
 prisma/.dev.db
 prisma/migrations/
 
+
 # VS Code
 .vscode/
 

@@ -29,7 +29,9 @@ export const fetchPatients = async (): Promise<Patient[]> => {
 
         console.log(`Fetching patients from: ${apiUrl}patients`);
 
-        const response = await fetch(`${apiUrl}patients`);
+        const response = await fetch(`${apiUrl}patients`, {
+            credentials: 'include',
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -63,7 +65,9 @@ export const fetchRecords = async (patientId: string): Promise<Record[]> => {
 
         console.log(`Fetching records from: ${apiUrl}patients/${patientId}/records`);
 
-        const response = await fetch(`${apiUrl}patients/${patientId}/records`);
+        const response = await fetch(`${apiUrl}patients/${patientId}/records`, {
+            credentials: 'include',
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

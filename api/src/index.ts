@@ -1,11 +1,15 @@
 import express from "express";
 import { connect } from "mongoose";
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 import errorHandler from "./middleware/errorHandler";
 import patientsRouter from "./routes/patients";
 import recordingsRouter from "./routes/recordings";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const mongodbUri = process.env.MONGODB_URI;
 
 if (!mongodbUri) {

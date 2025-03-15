@@ -27,11 +27,6 @@ prisma/migrations/
 
 # Docker
 .dockerignore
-Dockerfile
-.docker/
-
-# Kubernetes
-k8s/
 
 # VS Code
 .vscode/

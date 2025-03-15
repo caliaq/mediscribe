@@ -13,6 +13,9 @@ type Config = {
     bucket: {
       name: string;
     };
+    bedrock: {
+      modelName: string;
+    }
   };
   kky: {
     username: string;

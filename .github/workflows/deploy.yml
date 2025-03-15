@@ -3,9 +3,7 @@ on:
   push:
     branches:
       - production
-  merge_group:
-    branches:
-      - production
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

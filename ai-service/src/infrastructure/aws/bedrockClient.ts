@@ -1,15 +1,22 @@
-import { BedrockRuntimeClient, InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
-import dotenv from 'dotenv';
+import {
+  BedrockRuntimeClient,
+  InvokeModelCommand,
+} from "@aws-sdk/client-bedrock-runtime";
+import dotenv from "dotenv";
+import Config from "../../domain/config";
 
 dotenv.config();
 
 export class BedrockClient {
+  private config: Config;
   private bedrockClient: BedrockRuntimeClient;
   private modelName: string;
 
-  constructor() {
-    const { AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BEDROCK_MODEL_NAME } = process.env;
-    if (!AWS_REGION || !AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || !AWS_BEDROCK_MODEL_NAME) {
+  constructor(config: Config) {
+    this.config = config;
+    const { AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } =
+      process.env;
+    if (!AWS_REGION || !AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
       throw new Error("AWS environment variables are missing.");
     }
 
@@ -21,26 +28,25 @@ export class BedrockClient {
       },
     });
 
-    this.modelName = AWS_BEDROCK_MODEL_NAME;
+    this.modelName = "Claude3.7";
   }
 
   async processText(inputText: string): Promise<string> {
     try {
-      // Parametry pro volání modelu (Claude)
       const params = {
-        modelId: this.modelName, // Například 'Claude'
-        inputText: inputText, // Odesílání promptu jako text
-        maxTokens: 500, // Maximální počet tokenů pro odpověď
-        temperature: 0.5, // Ovlivnění kreativity modelu
+        modelId: this.modelName,
+        inputText: `Převeďte následující text do profesionální a lékařsky správné podoby. Opravit všechny chyby způsobené převodem, zachovat původní strukturu a informace, ale zajistit, aby byly použity správné lékařské termíny a místo slovních spojení používejte číslice, pokud je to vhodné. Pokud narazíte na výraz, který není jasný nebo je těžké ho interpretovat, označte ho pomocí <check></check> pro pozdější kontrolu. Text musí být v češtině: ${inputText}`,
+        maxTokens: 1000,
+        temperature: 0.1,
       };
 
-      // Vytvoření příkazu pro volání modelu
       const command = new InvokeModelCommand(params);
       const response = await this.bedrockClient.send(command);
 
-      // Získání odpovědi modelu, která by měla být v poli `body`
-      const responseBody = response.body ? JSON.parse(new TextDecoder().decode(response.body)) : '';
-      const correctedText = responseBody?.text || '';
+      const responseBody = response.body
+        ? JSON.parse(new TextDecoder().decode(response.body))
+        : "";
+      const correctedText = responseBody?.text || "";
 
       return correctedText.trim();
     } catch (error) {

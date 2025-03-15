@@ -1,0 +1,29 @@
+{
+  "type": "dev",
+  "server": {
+    "port": "4100",
+    "host": "localhost"
+  },
+  "aws": {
+    "account": {
+      "username": "",
+      "accessKeyId": "",
+      "secretAccessKey": "",
+      "region": "us-west-2"
+    },
+    "bucket": {
+      "name": ""
+    }
+  },
+  "kky": {
+    "username": "",
+    "password": "",
+    "chatHost": "https://ollama.kky.zcu.cz",
+    "ttsHost": "https://speechcloud.kky.zcu.cz:8887",
+    "sttUrl": "https://uwebasr.zcu.cz/api/v2/lindat/generic/cs?format=speechcloud_json",
+    "sttConvUrl": "https://uwebasr.zcu.cz/utils/v2/convert-speechcloud-json?format=plaintext"
+  },
+  "services": {
+    "apiServicePort": "4000"
+  }
+}

@@ -36,13 +36,13 @@ jobs:
 
       - name: Set environment variables for AI
         run: |
-          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> ai/.env
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ai/.env
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ai/.env
-          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> ai/.env
-          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> ai/.env
-          echo "KKY_USERNAME=hackathon2025" >> ai/.env
-          echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai/.env
+          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> ai-service/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ai-service/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ai-service/.env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> ai-service/.env
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> ai-service/.env
+          echo "KKY_USERNAME=hackathon2025" >> ai-service/.env
+          echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai-service/.env
 
       - name: Build and push API Docker image
         run: |
@@ -52,7 +52,7 @@ jobs:
       
       - name: Build and push AI Docker image
         run: |
-          docker build -t ai ./ai
+          docker build -t ai ./ai-service
           docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
 

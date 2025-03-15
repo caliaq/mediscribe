@@ -89,5 +89,6 @@ jobs:
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
             # Start containers using docker-compose
+            docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml down
             docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d
 

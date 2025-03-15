@@ -34,13 +34,11 @@ app.use(cookieParser());
 
 app.use("/api/v2/auth", authRouter);
 
-interface IReq extends express.Request {
-  session: any;
-}
+app.use(authHandler);
 
-app.use("/api/api/v2/patients", patientsRouter);
-app.use("/api/api/v2/doctors", patientsRouter);
-app.use("/api/api/v2/recordings", recordingsRouter);
+app.use("/api/v2/patients", patientsRouter);
+app.use("/api/v2/doctors", doctorsRouter);
+app.use("/api/v2/recordings", recordingsRouter);
 
 app.use(errorHandler);
 

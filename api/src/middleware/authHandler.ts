@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
+
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 interface IReq extends Request {

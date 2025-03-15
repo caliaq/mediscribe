@@ -31,17 +31,19 @@ export const fetchPatients = async (): Promise<Patient[]> => {
 
         const response = await fetch(`${apiUrl}patients`, {
             credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
         });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.data) {
+                return data.data || [];
+            }
         }
+        return [];
 
-        const data = await response.json();
-        if (!data.data) {
-            throw new Error('Data field is missing in the response');
-        }
 
-        return data.data || [];
     } catch (error) {
         console.error('Error fetching patients:', error);
         return [];

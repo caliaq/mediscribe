@@ -1,78 +1,85 @@
-
-
-const API_URL = process.env.API_URL
-
-
-export interface Patient {
-    // Define properties according to your patient model
-    id: string;
-    name: string;
-    // add more properties as needed
+"use client";
+export interface Address {
+    street: string;
+    city: string;
+    zip: string;
 }
 
-const checkResponse = async (response: Response) => {
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || 'Request failed');
+export interface Name {
+    first: string;
+    last: string;
+}
+
+export interface Patient {
+    _id: string;
+    name: Name;
+    address: Address;
+    birthDate: string;
+    sex: 'M' | 'F';
+    insurance: string;
+    allergies: string[];
+}
+
+export const fetchPatients = async (): Promise<Patient[]> => {
+    try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+            throw new Error('API_URL is not defined');
+        }
+
+        console.log(`Fetching patients from: ${apiUrl}patients`);
+
+        const response = await fetch(`${apiUrl}patients`, {
+            credentials: 'include',
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.data) {
+            throw new Error('Data field is missing in the response');
+        }
+
+        return data.data || [];
+    } catch (error) {
+        console.error('Error fetching patients:', error);
+        return [];
     }
-    return response;
 };
 
-/**
- * GET /api/v2/patients
- */
-export const getPatients = async (): Promise<Patient[]> => {
-    const response = await fetch(`${API_URL}`);
-    await checkResponse(response);
-    return response.json();
-};
 
-/**
- * GET /api/v2/patients/:patientId
- */
-export const getPatient = async (patientId: string): Promise<Patient> => {
-    const response = await fetch(`${API_URL}/${patientId}`);
-    await checkResponse(response);
-    return response.json();
-};
+export interface Record {
+    data: string;
+    summary: string;
+    date: string;
+}
 
-/**
- * POST /api/v2/patients/:patientId
- * Adjust the data parameter type as per your requirements.
- */
-export const createPatient = async (patientId: string, data: Partial<Patient>): Promise<Patient> => {
-    const response = await fetch(`${API_URL}/${patientId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    await checkResponse(response);
-    return response.json();
-};
 
-/**
- * PATCH /api/v2/patients/:patientId
- */
-export const updatePatient = async (patientId: string, data: Partial<Patient>): Promise<Patient> => {
-    const response = await fetch(`${API_URL}/${patientId}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    await checkResponse(response);
-    return response.json();
-};
+export const fetchRecords = async (patientId: string): Promise<Record[]> => {
+    try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+            throw new Error('API_URL is not defined');
+        }
 
-/**
- * DELETE /api/v2/patients/:patientId
- */
-export const deletePatient = async (patientId: string): Promise<void> => {
-    const response = await fetch(`${API_URL}/${patientId}`, {
-        method: 'DELETE'
-    });
-    await checkResponse(response);
+        console.log(`Fetching records from: ${apiUrl}patients/${patientId}/records`);
+
+        const response = await fetch(`${apiUrl}patients/${patientId}/records`, {
+            credentials: 'include',
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.data) {
+            throw new Error('Data field is missing in the response');
+        }
+
+        return data.data || [];
+    } catch (error) {
+        console.error('Error fetching records:', error);
+        return [];
+    }
 };

@@ -51,3 +51,4 @@ jobs:
 
             # Start containers using docker-compose
             docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d
+            

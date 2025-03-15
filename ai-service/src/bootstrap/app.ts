@@ -47,7 +47,7 @@ class Application {
     // Předpokládáme, že MainRouter nyní pracuje s awsClient, případně lze předat i kkyClient
     const mainRouter: MainRouter = new MainRouter(this.config);
 
-    this.app.use("/api/v2", mainRouter.run());
+    this.app.use("/ai/api/v2", mainRouter.run());
 
     this.app.listen(this.config.server.port, () => {
       console.log(`Server běží na portu ${this.config.server.port}`);

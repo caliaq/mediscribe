@@ -1,13 +1,15 @@
-import Application from "./bootstrap/app";
+import Application from "./bootstrap/app.js";
 
-// Get arguments from the command line
+// Získání argumentu z příkazové řádky
 const args = process.argv.slice(2);
-var envType = args[0];
+let envType = args[0] || "dev";
 
-if (!envType) {
-    envType = 'dev';
-}
-
-const app: Application = new Application(envType);
-
-app.run();
+(async () => {
+  try {
+    const app = await Application.create(envType);
+    app.run();
+  } catch (error) {
+    console.error("❌ Chyba při spouštění aplikace:", error);
+    process.exit(1);
+  }
+})();

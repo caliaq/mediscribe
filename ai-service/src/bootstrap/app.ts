@@ -1,6 +1,6 @@
 import Config from "../domain/config";
 import newConfig from "./config";
-import express from "express";
+import express from "express"; 
 import CORS from "cors";
 import MainRouter from "./router";
 import { KkyClient } from "../infrastructure/kky/kkyClient";

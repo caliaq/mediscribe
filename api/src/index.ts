@@ -5,7 +5,7 @@ import errorHandler from "./middleware/errorHandler";
 import patientsRouter from "./routes/patients";
 import recordingsRouter from "./routes/recordings";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const mongodbUri = process.env.MONGODB_URI;
 
 if (!mongodbUri) {

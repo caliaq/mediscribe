@@ -20,8 +20,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/v2/patients", patientsRouter);
-// app.use("/api/v2/doctors", patientsRouter);
-// app.use("/api/v2/records", patientsRouter);
+app.use("/api/v2/doctors", patientsRouter);
+app.use("/api/v2/records", patientsRouter);
 app.use("/api/v2/recordings", recordingsRouter);
 
 app.use(errorHandler);

@@ -5,6 +5,12 @@ import dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
+import recordsService from "../services/records";
+
+interface IReq extends Request {
+  doctorId: string;
+}
+
 const addRecording = async (
   req: Request,
   res: Response,
@@ -23,7 +29,6 @@ const addRecording = async (
     const request = await axios.post(`${process.env.AI_API_URL}process`, {
       filePath,
     });
-
     console.log(request.data);
 
     res.json({ success: true });

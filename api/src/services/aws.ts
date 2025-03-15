@@ -45,6 +45,7 @@ const getFile = async (filePath: string) => {
       Bucket: bucketName,
       Key: filePath,
     });
+
     const response = await s3Client.send(command);
 
     const bodyContents = await streamToBuffer(response.Body);

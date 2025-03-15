@@ -5,6 +5,12 @@ import dotenv from "dotenv";
 import path from "path";
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
+import recordsService from "../services/records";
+
+interface IReq extends Request {
+  doctorId: string;
+}
+
 const addRecording = async (
   req: Request,
   res: Response,
@@ -24,7 +30,14 @@ const addRecording = async (
       filePath,
     });
 
-    console.log(request.data);
+    const { correctedText } = request.data;
+
+    await recordsService.createRecord({
+      patientId: body.patientId,
+      data: correctedText,
+      doctorId: (req as IReq).doctorId,
+      summary: "To do",
+    });
 
     res.json({ success: true });
   } catch (error) {

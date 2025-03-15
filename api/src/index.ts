@@ -17,7 +17,7 @@ if (!mongodbUri) {
 }
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "100MB" }));
 
 app.use("/api/v2/patients", patientsRouter);
 app.use("/api/v2/doctors", patientsRouter);

@@ -81,8 +81,8 @@ jobs:
               sudo apt-get install -y awscli
             fi
 
-            # # Pull the Docker image from ECR
-            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+            # Pull the Docker image from ECR
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
             # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
             # # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 

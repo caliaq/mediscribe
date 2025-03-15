@@ -41,7 +41,7 @@ class Application {
 
   public run(): void {
     const mainRouter: MainRouter = new MainRouter(this.config);
-    this.app.use("/api/v2", mainRouter.run());
+    this.app.use("/ai/api/v2", mainRouter.run());
 
     this.app.listen(this.config.server.port, () => {
       console.log(`🚀 Server běží na portu ${this.config.server.port}`);

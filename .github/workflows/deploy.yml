@@ -83,11 +83,11 @@ jobs:
 
             # Pull the Docker image from ECR
             aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
-            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
-            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
-            # # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
             # # Start containers using docker-compose
 
-            # docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml down
-            # docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d
+            docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml down
+            docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d

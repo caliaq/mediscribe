@@ -2,9 +2,8 @@
   "name": "api",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "dev": "npx tsx --env-file=.env --watch src/index.ts",
+    "dev": "npx tsx --watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -14,13 +13,21 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.758.0",
     "@aws-sdk/lib-storage": "^3.758.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/mongoose": "^5.11.96",
+    "axios": "^1.8.3",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.0.1",
-    "mongoose": "^8.12.1"
+    "express-session": "^1.18.1",
+    "mongoose": "^8.12.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.10",
     "typescript": "^5.8.2"
   }

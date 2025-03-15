@@ -9,4 +9,8 @@ router.post("/", controller.createPatient);
 router.patch("/:id", controller.updatePatient);
 router.delete("/:id", controller.deletePatient);
 
+// records
+router.get("/:id/records", controller.getRecords);
+router.post("/:id/records", controller.addRecord);
+
 export default router;

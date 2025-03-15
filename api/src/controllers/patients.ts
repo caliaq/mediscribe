@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import patientsService from "../services/patients";
+import recordsService from "../services/records";
 
 const getPatients = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -61,10 +62,33 @@ const deletePatient = async (
   }
 };
 
+const getRecords = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const records = await recordsService.getRecordsByDoctor(req.params.id);
+    res.json({ success: true, data: records });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addRecord = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const record = recordsService.createRecord({
+      ...req.body,
+      patientId: req.params.id,
+    });
+    res.json({ success: true, data: record });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getPatients,
   getPatient,
   createPatient,
   updatePatient,
   deletePatient,
+  getRecords,
+  addRecord,
 };

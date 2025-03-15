@@ -39,17 +39,8 @@ interface IReq extends express.Request {
   session: any;
 }
 
-app.use((req, res, next) => {
-  if ((req as IReq).session.loggedIn) {
-    next();
-  } else {
-    res.status(401).json({ success: false, data: { message: "unauthorized" } });
-  }
-});
-
 app.use("/api/api/v2/patients", patientsRouter);
 app.use("/api/api/v2/doctors", patientsRouter);
-app.use("/api/api/v2/records", patientsRouter);
 app.use("/api/api/v2/recordings", recordingsRouter);
 
 app.use(errorHandler);

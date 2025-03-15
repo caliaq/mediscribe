@@ -1,6 +1,6 @@
-import { AwsClient } from '../infrastructure/aws/awsClient';
-import { KkyClient } from '../infrastructure/kky/kkyClient';
-import Config from '../domain/config';
+import { AwsClient } from '../infrastructure/aws/awsClient.js';
+import { KkyClient } from '../infrastructure/kky/kkyClient.js';
+import Config from '../domain/config.js';
 
 export class ProcessAudioUseCase {
   private config: Config;
@@ -14,20 +14,41 @@ export class ProcessAudioUseCase {
   }
 
   async execute(fileUrl: string): Promise<string> {
-    // Stažení zvukového souboru z AWS
-    const audioBuffer = await this.awsClient.getFile(fileUrl);
+    try {
+      console.log(`🔄 Stahuji soubor z AWS: ${fileUrl}`);
+      const audioBuffer = await this.awsClient.getFile(fileUrl);
 
-    console.log(audioBuffer)
-    // Přepis audio souboru na text pomocí KKY
-    const transcript = await this.kkyClient.speechToText(audioBuffer);
+      if (!audioBuffer || audioBuffer.length === 0) {
+        throw new Error(`❌ Chyba: Soubor ${fileUrl} je prázdný nebo neexistuje.`);
+      }
 
+      console.log(`✅ Soubor stažen (${audioBuffer.length} bajtů)`);
+      
+      // Přepis audio souboru na text pomocí KKY
+      console.log(`🔄 Přepisuji audio pomocí KKY API`);
+      const transcript = await this.kkyClient.speechToText(audioBuffer);
+      
+      if (!transcript) {
+        throw new Error('❌ Chyba: Transkript je prázdný.');
+      }
 
-    console.log("transcript: ", transcript)
-    // Korektura transkriptu pomocí AWS AI
-    const correctedTranscript = await this.awsClient.correctText(transcript);
+      console.log(`✅ Transkript přijat: ${transcript.substring(0, 50)}...`);
 
-    console.log(correctedTranscript)
-    return correctedTranscript;
+      // Korektura transkriptu pomocí AWS AI
+      console.log(`🔄 Korektura textu pomocí AWS AI`);
+      const correctedTranscript = await this.awsClient.correctText(transcript);
+
+      if (!correctedTranscript) {
+        throw new Error('❌ Chyba: Korekce textu selhala.');
+      }
+
+      console.log(`✅ Korekce hotová: ${correctedTranscript.substring(0, 50)}...`);
+
+      return correctedTranscript;
+    } catch (error) {
+      console.error(`❌ Chyba při zpracování souboru: ${error}`);
+      throw error;
+    }
   }
 }
 

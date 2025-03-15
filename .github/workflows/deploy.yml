@@ -41,7 +41,19 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+            # Install AWS CLI if not already installed
+            if ! command -v aws &> /dev/null
+            then
+              echo "AWS CLI not found. Installing..."
+              sudo apt-get update
+              sudo apt-get install -y awscli
+            fi
+
+            # Authenticate to AWS ECR using AWS CLI
+            $(aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com)
+
+            # Pull the Docker image from ECR
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
-            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+
+            # Start containers using docker-compose
             docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d

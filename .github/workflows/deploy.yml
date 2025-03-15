@@ -24,7 +24,7 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Authenticate to AWS ECR
-        run: aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
+        run: docker login -u AWS -p $(aws ecr get-login-password --region us-west-2) 517860088618.dkr.ecr.us-west-2.amazonaws.com
 
 
       - name: Build and push api Docker image

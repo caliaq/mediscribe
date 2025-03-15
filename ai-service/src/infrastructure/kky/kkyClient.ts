@@ -2,11 +2,11 @@ import DigestFetch from 'digest-fetch';
 import Config from '../../domain/config';
 
 export class KkyClient {
-  private config: Config;
   private authClient: DigestFetch;
-  
+  private config: Config;
+
   constructor(config: Config) {
-    this.config = config
+    this.config = config;
     this.authClient = new DigestFetch(this.config.kky.username, this.config.kky.password);
   }
 
@@ -41,3 +41,5 @@ export class KkyClient {
     return convResponse.text();
   }
 }
+
+export default KkyClient;

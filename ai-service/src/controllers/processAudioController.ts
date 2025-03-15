@@ -16,9 +16,10 @@ export class ProcessController {
   async process(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { filePath } = req.body;
+      console.log(req.body)
       console.log(filePath)
       const correctedText = await this.usecase.execute(filePath);
-      res.status(200).json({ correctedText });
+      res.status(200).json({correctedText});
     } catch (error) {
       next(error);
     }

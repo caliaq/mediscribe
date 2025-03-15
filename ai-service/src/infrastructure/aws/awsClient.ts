@@ -61,7 +61,7 @@ export class AwsClient {
 
   async correctText(text: string): Promise<string> {
     // Implement actual AWS AI text correction logic here
-    return `Corrected text: ${text}`;
+    return text.trim();
   }
 
   private async streamToBuffer(stream: Readable): Promise<Buffer> {

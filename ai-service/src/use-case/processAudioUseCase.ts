@@ -1,16 +1,19 @@
 import { AwsClient } from '../infrastructure/aws/awsClient';
 import { KkyClient } from '../infrastructure/kky/kkyClient';
+import { BedrockClient } from '../infrastructure/aws/bedrockClient';
 import Config from '../domain/config';
 
 export class ProcessAudioUseCase {
   private config: Config;
   private awsClient: AwsClient;
   private kkyClient: KkyClient;
+  private bedrockClient: BedrockClient;
 
   constructor(config: Config) {
     this.config = config;
     this.awsClient = new AwsClient();
     this.kkyClient = new KkyClient(config);
+    this.bedrockClient = new BedrockClient(config);
   }
 
   async execute(fileUrl: string): Promise<string> {
@@ -24,7 +27,7 @@ export class ProcessAudioUseCase {
 
     console.log("transcript: ", transcript)
     // Korektura transkriptu pomocí AWS AI
-    const correctedTranscript = await this.awsClient.correctText(transcript);
+    const correctedTranscript = await this.bedrockClient.processText(transcript);
 
     console.log(correctedTranscript)
     return correctedTranscript;

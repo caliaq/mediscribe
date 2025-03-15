@@ -69,7 +69,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Login with QR Code</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Přihlaštese pomocí qr kódu</h1>
         
         {session?.qrCode && (
           <div className="flex flex-col items-center">
@@ -83,7 +83,7 @@ export default function LoginPage() {
               />
             </div>
             <p className="text-sm text-gray-600 text-center">
-              Scan the QR code with your mobile device to log in
+              Naskenujkte qr kod pomocí vašeho mobilního zařízení a přihlašte se.
             </p>
           </div>
         )}

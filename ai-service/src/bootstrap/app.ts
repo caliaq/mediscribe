@@ -13,6 +13,7 @@ class Application {
 
   constructor(envType: string) {
     this.config = newConfig(envType);
+    console.log(this.config);
     // Inicializace KKY klienta a otestování spojení s KKY API
     this.kkyClient = new KkyClient(this.config);
     this.pingKky()

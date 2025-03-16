@@ -12,10 +12,11 @@ const Patients = () => {
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="w-full p-4 mx-auto">
       {patients.map((patient) => {
         const fullName = `${patient.name.first} ${patient.name.last}`;
-        const age = new Date().getFullYear() - new Date(patient.birthDate).getFullYear();
+        const age =
+          new Date().getFullYear() - new Date(patient.birthDate).getFullYear();
         const location = `${patient.address.street}, ${patient.address.city} ${patient.address.zip}`;
 
         return (

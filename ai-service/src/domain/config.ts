@@ -14,7 +14,7 @@ type Config = {
       name: string;
     };
     bedrock: {
-      modelName: string;
+      arn: string;
     }
   };
   kky: {

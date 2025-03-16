@@ -19,6 +19,7 @@ export class AwsClient {
         secretAccessKey: this.config.aws.account.secretAccessKey,
       },
     });
+
   }
 
   async getFile(bucketPath: string | undefined): Promise<Buffer> {

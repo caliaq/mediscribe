@@ -55,7 +55,6 @@ jobs:
           docker tag api 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
           docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
 
-      
       - name: Build and push AI Docker image
         run: |
           docker build -t ai ./ai-service

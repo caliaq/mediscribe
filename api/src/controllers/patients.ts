@@ -1,14 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import patientsService from "../services/patients";
 import recordsService from "../services/records";
 
-interface IReq extends Request {
-  doctorId: string;
-}
-
-const getPatients = async (req: IReq, res: Response, next: NextFunction) => {
+const getPatients: RequestHandler = async (req, res, next) => {
   try {
-    const doctorId = req.doctorId;
+    const doctorId = req.doctorId!;
     const patients = await patientsService.getPatientsByDoctor(doctorId);
     res.json({ success: true, data: patients });
   } catch (error) {
@@ -16,7 +12,7 @@ const getPatients = async (req: IReq, res: Response, next: NextFunction) => {
   }
 };
 
-const getPatient = async (req: Request, res: Response, next: NextFunction) => {
+const getPatient: RequestHandler = async (req, res, next) => {
   try {
     const patient = await patientsService.getPatient(req.params.id);
     res.json({ success: true, data: patient });
@@ -25,11 +21,7 @@ const getPatient = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const createPatient = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const createPatient: RequestHandler = async (req, res, next) => {
   try {
     const patient = await patientsService.createPatient(req.body);
     res.json({ success: true, data: patient });
@@ -38,11 +30,7 @@ const createPatient = async (
   }
 };
 
-const updatePatient = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const updatePatient: RequestHandler = async (req, res, next) => {
   try {
     const patient = await patientsService.updatePatient(
       req.params.id,
@@ -54,11 +42,7 @@ const updatePatient = async (
   }
 };
 
-const deletePatient = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deletePatient: RequestHandler = async (req, res, next) => {
   try {
     await patientsService.deletePatient(req.params.id);
     res.json({ success: true });
@@ -67,7 +51,7 @@ const deletePatient = async (
   }
 };
 
-const getRecords = async (req: Request, res: Response, next: NextFunction) => {
+const getRecords: RequestHandler = async (req, res, next) => {
   try {
     const records = await recordsService.getRecordsByPatient(req.params.id);
     res.json({ success: true, data: records });
@@ -76,7 +60,7 @@ const getRecords = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const addRecord = (req: Request, res: Response, next: NextFunction) => {
+const addRecord: RequestHandler = (req, res, next) => {
   try {
     const record = recordsService.createRecord({
       ...req.body,

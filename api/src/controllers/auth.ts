@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import doctorsService from "../services/doctors";
 import crypto from "crypto";
 
 const sessions: { [key: string]: string } = {};
 
-const access = async (req: Request, res: Response, next: NextFunction) => {
+const access: RequestHandler = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -20,12 +20,12 @@ const access = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const guarantee = async (req: Request, res: Response, next: NextFunction) => {
+const guarantee: RequestHandler = async (req, res, next) => {
   try {
     const { sessionId } = req.query as { sessionId: string };
     console.log(sessionId);
-    console.log(sessions);
     const { authorization } = req.headers;
+    console.log(authorization);
     if (!Object.keys(sessions).includes(sessionId) || !authorization) {
       throw new Error("invalid request");
     }
@@ -37,7 +37,8 @@ const guarantee = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
-const session = async (_req: Request, res: Response, next: NextFunction) => {
+
+const session: RequestHandler = async (_req, res, next) => {
   try {
     const sessionId: string = crypto.randomUUID();
     sessions[sessionId] = "";
@@ -47,11 +48,15 @@ const session = async (_req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const status = async (req: Request, res: Response, next: NextFunction) => {
+const status: RequestHandler = async (req, res, next) => {
   try {
     const { sessionId } = req.query as { sessionId: string };
     if (!sessions[sessionId]) {
-      res.json({ success: false, data: { message: "sessionId required" } });
+      res.json({
+        success: false,
+        data: { message: "sessionId not found" },
+      });
+      return;
     }
     const token = sessions[sessionId];
     await doctorsService.verify(token);

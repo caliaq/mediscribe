@@ -31,7 +31,7 @@ const auth = async (username: string, password: string) => {
   });
 };
 
-const verify = async (token: string) => {
+const verify = (token: string) => {
   const doctor = jwt.verify(token, process.env.SESSION_SECRET!, {
     ignoreExpiration: false,
   });

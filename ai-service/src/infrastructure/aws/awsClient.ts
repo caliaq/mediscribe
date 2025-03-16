@@ -19,38 +19,13 @@ export class AwsClient {
         secretAccessKey: this.config.aws.account.secretAccessKey,
       },
     });
-<<<<<<< HEAD
 
-    this.bucketName = AWS_BUCKET_NAME;
   }
-
-  // private extractKeyFromPath(bucketPath: string | undefined): string {
-  //   if (!bucketPath) {
-  //     throw new Error("Invalid bucketPath: undefined or empty");
-  //   }
-  //   return bucketPath.replace(/^s3:\/\/[^/]+\//, "").replace(/^https:\/\/[^/]+\//, "");
-  // }
-=======
-  }
->>>>>>> master
 
   async getFile(bucketPath: string | undefined): Promise<Buffer> {
     if (!bucketPath) {
       throw new Error("Invalid bucketPath: undefined or empty");
     }
-<<<<<<< HEAD
-    
-    // const key = this.extractKeyFromPath(bucketPath);
-    // if (!key) {
-    //   throw new Error("Extracted key is empty after processing bucketPath");
-    // }
-
-    try {
-      const response = await this.s3Client.send(new GetObjectCommand({
-        Bucket: "mediscribe-bucket",
-        Key: bucketPath,
-      }));
-=======
 
     try {
       const response = await this.s3Client.send(
@@ -59,7 +34,6 @@ export class AwsClient {
           Key: bucketPath,
         })
       );
->>>>>>> master
 
       if (!response.Body) {
         throw new Error("Invalid response body from AWS S3.");

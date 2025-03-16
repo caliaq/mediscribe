@@ -26,27 +26,27 @@ export class AwsClient {
     this.bucketName = AWS_BUCKET_NAME;
   }
 
-  private extractKeyFromPath(bucketPath: string | undefined): string {
-    if (!bucketPath) {
-      throw new Error("Invalid bucketPath: undefined or empty");
-    }
-    return bucketPath.replace(/^s3:\/\/[^/]+\//, "").replace(/^https:\/\/[^/]+\//, "");
-  }
+  // private extractKeyFromPath(bucketPath: string | undefined): string {
+  //   if (!bucketPath) {
+  //     throw new Error("Invalid bucketPath: undefined or empty");
+  //   }
+  //   return bucketPath.replace(/^s3:\/\/[^/]+\//, "").replace(/^https:\/\/[^/]+\//, "");
+  // }
 
   async getFile(bucketPath: string | undefined): Promise<Buffer> {
     if (!bucketPath) {
       throw new Error("Invalid bucketPath: undefined or empty");
     }
     
-    const key = this.extractKeyFromPath(bucketPath);
-    if (!key) {
-      throw new Error("Extracted key is empty after processing bucketPath");
-    }
+    // const key = this.extractKeyFromPath(bucketPath);
+    // if (!key) {
+    //   throw new Error("Extracted key is empty after processing bucketPath");
+    // }
 
     try {
       const response = await this.s3Client.send(new GetObjectCommand({
         Bucket: "mediscribe-bucket",
-        Key: key,
+        Key: bucketPath,
       }));
 
       if (!response.Body) {

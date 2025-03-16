@@ -13,7 +13,6 @@ class Application {
 
   constructor(envType: string) {
     this.config = newConfig(envType);
-    console.log(this.config);
     // Inicializace KKY klienta a otestování spojení s KKY API
     this.kkyClient = new KkyClient(this.config);
     this.pingKky()
@@ -49,7 +48,7 @@ class Application {
       res.status(200).send("Server is running.");
     });
 
-    this.app.listen(this.config.server.port, () => {
+    this.app.listen(this.config.server.port, this.config.server.host, () => {
       console.log(`Server běží na portu ${this.config.server.port}`);
     });
   }

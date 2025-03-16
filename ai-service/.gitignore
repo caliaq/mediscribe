@@ -25,6 +25,8 @@ logs/
 prisma/.dev.db
 prisma/migrations/
 
+# Docker
+.dockerignore
 
 # VS Code
 .vscode/

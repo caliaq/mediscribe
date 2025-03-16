@@ -23,42 +23,44 @@ jobs:
         run: |
           aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
       
-      - name: Set environment variables for API
-        run: |
-          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > api/.env
-          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> api/.env
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> api/.env
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
-          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> api/.env
-          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> api/.env 
-
-      # - name: Set environment variables for AI
+      # - name: Set environment variables for API
       #   run: |
-      #     echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> ai-service/.env
-      #     echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ai-service/.env
-      #     echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ai-service/.env
-      #     echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> ai-service/.env
-      #     echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> ai-service/.env
-      #     echo "KKY_USERNAME=hackathon2025" >> ai-service/.env
-      #     echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai-service/.env
+      #     echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > api/.env
+      #     echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> api/.env
+      #     echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> api/.env
+      #     echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
+      #     echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> api/.env
+      #     echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> api/.env 
+
+      - name: Set environment variables for AI
+        run: |
+          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> ai-service/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ai-service/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ai-service/.env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> ai-service/.env
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> ai-service/.env
+          echo "AWS_BEDROCK_ARN=${{ secrets.AWS_BEDROCK_ARN }}" >> ai-service/.env
+          
+          echo "KKY_USERNAME=hackathon2025" >> ai-service/.env
+          echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai-service/.env
 
       - name: Set environment variables for administration
         run: |
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> administration/.env
           echo "NEXT_PUBLIC_SESSION_SECRET=${{ secrets.NEXT_PUBLIC_SESSION_SECRET }}" >> administration/.env
 
-      - name: Build and push API Docker image
-        run: |
-          docker build -t api ./api
-          docker tag api 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
-          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+      # - name: Build and push API Docker image
+      #   run: |
+      #     docker build -t api ./api
+      #     docker tag api 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+      #     docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
 
       
-      # - name: Build and push AI Docker image
-      #   run: |
-      #     docker build -t ai ./ai-service
-      #     docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
-      #     docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+      - name: Build and push AI Docker image
+        run: |
+          docker build -t ai ./ai-service
+          docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
 
       - name: Build and push Administration Docker image
         run: |
@@ -83,8 +85,8 @@ jobs:
 
             # Pull the Docker image from ECR
             aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
-            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
-            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+            # docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
             docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
 
             # # Start containers using docker-compose

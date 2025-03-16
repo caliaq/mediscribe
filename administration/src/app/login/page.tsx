@@ -20,7 +20,7 @@ export default function LoginPage() {
     const initializeSession = async () => {
       try {
         const response = await fetch(
-          process.env.NEXT_PUBLIC_API_URL + "auth/session",
+          process.env.NEXT_PUBLIC_API_URL + "ath/session",
           {
             method: "GET",
             headers: {

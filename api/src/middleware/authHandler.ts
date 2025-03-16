@@ -1,20 +1,32 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-interface IReq extends Request {
-  doctorId: string;
+// Extend the Express Request type
+declare global {
+  namespace Express {
+    interface Request {
+      doctorId?: string;
+    }
+  }
 }
 
-export default (req: IReq, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization as string;
+const authHandler: RequestHandler = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    res.status(401).send("Token required");
+    return;
+  }
+
   const token = authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(401).send("Token required");
+    res.status(401).send("Token required");
+    return;
   }
 
   jwt.verify(
@@ -22,10 +34,14 @@ export default (req: IReq, res: Response, next: NextFunction) => {
     process.env.SESSION_SECRET!,
     (err: jwt.VerifyErrors | null, data: any) => {
       if (err) {
-        return res.status(403).send("invalid or expired token");
+        res.status(403).send("Invalid or expired token");
+        return;
       }
+
       req.doctorId = data.doctorId;
       next();
     }
   );
 };
+
+export default authHandler;

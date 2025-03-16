@@ -16,20 +16,6 @@ export default function HomePage() {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="min-h-screen p-8">
-      <div className="flex justify-end">
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-        >
-          Odhlásit se
-        </button>
-      </div>
-      
-      {/* Add your main page content here */}
-      <h1 className="text-2xl font-bold mt-8">Dashboard</h1>
-=======
     <div className="min-h-screen px-2">
         <button
           onClick={handleLogout}
@@ -37,7 +23,6 @@ export default function HomePage() {
         >
           Odhlásit se
         </button>
->>>>>>> master
 
       <div className="flex">
         <div className="flex flex-col w-1/5 items-center max-h-dvh overflow-y-auto">

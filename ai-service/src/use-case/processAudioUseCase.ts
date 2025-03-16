@@ -11,7 +11,7 @@ export class ProcessAudioUseCase {
 
   constructor(config: Config) {
     this.config = config;
-    this.awsClient = new AwsClient();
+    this.awsClient = new AwsClient(config);
     this.kkyClient = new KkyClient(config);
     this.bedrockClient = new BedrockClient(config);
   }
@@ -24,7 +24,7 @@ export class ProcessAudioUseCase {
     // Přepis audio souboru na text pomocí KKY
     const transcript = await this.kkyClient.speechToText(audioBuffer);
 
-
+ 
     console.log("transcript: ", transcript)
     // Korektura transkriptu pomocí AWS AI
     const correctedTranscript = await this.bedrockClient.processText(transcript);

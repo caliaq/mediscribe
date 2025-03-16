@@ -117,7 +117,11 @@ export default function LoginPage() {
                     onClick={checkStatus}
                     className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
                 >
+<<<<<<< HEAD
                     Check Status
+=======
+                    ověřit
+>>>>>>> master
                 </button>
 
                 {status && (

@@ -16,6 +16,7 @@ export default function HomePage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen p-8">
       <div className="flex justify-end">
         <button
@@ -28,6 +29,15 @@ export default function HomePage() {
       
       {/* Add your main page content here */}
       <h1 className="text-2xl font-bold mt-8">Dashboard</h1>
+=======
+    <div className="min-h-screen px-2">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded absolute top-4 right-4"
+        >
+          Odhlásit se
+        </button>
+>>>>>>> master
 
       <div className="flex">
         <div className="flex flex-col w-1/5 items-center max-h-dvh overflow-y-auto">

@@ -8,4 +8,8 @@ export default (
 ) => {
   console.error(err.stack);
   res.json({ success: false, data: { message: "something went wrong!" } });
+<<<<<<< HEAD
+=======
+  next();
+>>>>>>> master
 };

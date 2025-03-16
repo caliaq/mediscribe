@@ -1,0 +1,94 @@
+name: Deploy to EC2
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Authenticate to AWS ECR
+        run: |
+          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 517860088618.dkr.ecr.us-west-2.amazonaws.com
+      
+      - name: Set environment variables for API
+        run: |
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > api/.env
+          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> api/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> api/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> api/.env
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> api/.env 
+
+      - name: Set environment variables for AI
+        run: |
+          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> ai-service/.env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ai-service/.env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ai-service/.env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> ai-service/.env
+          echo "AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }}" >> ai-service/.env
+          echo "KKY_USERNAME=hackathon2025" >> ai-service/.env
+          echo "KKY_PASSWORD=pheboa4zeesh4Kie" >> ai-service/.env
+
+      - name: Set environment variables for administration
+        run: |
+          echo "AWS_USERNAME=${{ secrets.AWS_USERNAME }}" >> administration/.env
+       
+
+      - name: Build and push API Docker image
+        run: |
+          docker build -t api ./api
+          docker tag api 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+
+      
+      - name: Build and push AI Docker image
+        run: |
+          docker build -t ai ./ai-service
+          docker tag ai 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+
+
+      - name: Build and push Administration Docker image
+        run: |
+          docker build -t administration ./administration
+          docker tag administration 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+          docker push 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Install AWS CLI if not already installed
+            if ! command -v aws &> /dev/null
+            then
+              echo "AWS CLI not found. Installing..."
+              sudo apt-get update
+              sudo apt-get install -y awscli
+            fi
+
+            # Pull the Docker image from ECR
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:api
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:ai
+            docker pull 517860088618.dkr.ecr.us-west-2.amazonaws.com/mediscribe:administration
+
+            # Start containers using docker-compose
+            docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml down
+            docker-compose -f /home/${{ secrets.EC2_USER }}/docker-compose.yml up -d
+

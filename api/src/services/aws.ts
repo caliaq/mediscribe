@@ -1,6 +1,9 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import { DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const s3Client = new S3Client({
   credentials: {
@@ -28,7 +31,6 @@ const addFile = async (filePath: string, data: string) => {
 };
 
 const removeFile = async (filePath: string) => {
-  // removes a file from s3
   return s3Client.send(
     new DeleteObjectCommand({
       Bucket: bucketName,
@@ -43,6 +45,7 @@ const getFile = async (filePath: string) => {
       Bucket: bucketName,
       Key: filePath,
     });
+
     const response = await s3Client.send(command);
 
     const bodyContents = await streamToBuffer(response.Body);

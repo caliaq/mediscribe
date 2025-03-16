@@ -1,5 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import s3 from "../services/aws";
+import axios from "axios";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+
+import recordsService from "../services/records";
+
+interface IReq extends Request {
+  doctorId: string;
+}
 
 const addRecording = async (
   req: Request,
@@ -13,11 +23,37 @@ const addRecording = async (
     }
 
     const fileName = `${Date.now()}`;
-    await s3.addFile(
-      `recordings/${body.patientId}/${fileName}.${body.fileType}`,
-      body.data
-    );
-    res.json({ success: true });
+    const filePath = `recordings/${body.patientId}/${fileName}.${body.fileType}`;
+    await s3.addFile(filePath, body.data);
+
+    const request = await axios.post(`${process.env.AI_API_URL!}process`, {
+      filePath,
+    });
+
+    const { correctedText } = request.data;
+
+    const record = await recordsService.createRecord({
+      patientId: body.patientId,
+      data: correctedText,
+      doctorId: (req as IReq).doctorId,
+      filePath,
+    });
+
+    res.json({ success: true, data: record });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getRecording = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const record = await recordsService.getRecord(id);
+    res.send(record);
   } catch (error) {
     next(error);
   }
@@ -25,4 +61,5 @@ const addRecording = async (
 
 export default {
   addRecording,
+  getRecording,
 };

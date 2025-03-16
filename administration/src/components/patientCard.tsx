@@ -27,7 +27,7 @@ export default function PatientCard() {
   };
 
   if (!selectedPatient) {
-    return <div>No patient selected</div>;
+    return <div>Vyberte pacienta</div>;
   }
 
   return (

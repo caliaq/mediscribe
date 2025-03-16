@@ -18,3 +18,27 @@ body {
   font-family: "Outfit";
 
 }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A3441;
+  border-radius: 5px;
+  border: 2px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3A4551;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2A3441 var(--background);
+}

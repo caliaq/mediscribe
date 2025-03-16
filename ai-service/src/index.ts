@@ -9,5 +9,4 @@ if (!envType) {
 }
 
 const app: Application = new Application(envType);
-app.cors();
 app.run();

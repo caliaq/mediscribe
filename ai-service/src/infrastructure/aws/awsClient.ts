@@ -13,7 +13,7 @@ export class AwsClient {
   constructor(config: Config) {
     this.config = config;
     this.s3Client = new S3Client({
-      region: this.config.aws.account.region,
+      region: this.config.aws.bucket.region,
       credentials: {
         accessKeyId: this.config.aws.account.accessKeyId,
         secretAccessKey: this.config.aws.account.secretAccessKey,

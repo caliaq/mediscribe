@@ -9,10 +9,11 @@
       "username": "",
       "accessKeyId": "",
       "secretAccessKey": "",
-      "region": "us-west-2"
+      "region": "us-east-1"
     },
     "bucket": {
-      "name": ""
+      "name": "",
+      "region": "us-west-2"
     },
     "bedrock": {
       "arn": ""

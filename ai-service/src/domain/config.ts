@@ -12,6 +12,7 @@ type Config = {
     };
     bucket: {
       name: string;
+      region: string;
     };
     bedrock: {
       arn: string;

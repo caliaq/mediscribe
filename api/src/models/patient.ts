@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 
 const patientSchema = new Schema(
   {
+    doctorId: { type: Schema.Types.ObjectId, required: true },
     name: {
       first: { type: String, required: true },
       last: { type: String, required: true },
@@ -14,7 +15,7 @@ const patientSchema = new Schema(
     },
     sex: { type: String, required: true },
     insurance: { type: Number, required: true },
-    alergies: { type: Array, default: [] },
+    allergies: { type: Array, default: [] },
   },
   { versionKey: false }
 );

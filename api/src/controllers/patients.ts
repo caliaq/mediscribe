@@ -2,9 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import patientsService from "../services/patients";
 import recordsService from "../services/records";
 
-const getPatients = async (req: Request, res: Response, next: NextFunction) => {
+interface IReq extends Request {
+  doctorId: string;
+}
+
+const getPatients = async (req: IReq, res: Response, next: NextFunction) => {
   try {
-    const patients = await patientsService.getPatients();
+    const doctorId = req.doctorId;
+    const patients = await patientsService.getPatientsByDoctor(doctorId);
     res.json({ success: true, data: patients });
   } catch (error) {
     next(error);
@@ -64,7 +69,7 @@ const deletePatient = async (
 
 const getRecords = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const records = await recordsService.getRecordsByDoctor(req.params.id);
+    const records = await recordsService.getRecordsByPatient(req.params.id);
     res.json({ success: true, data: records });
   } catch (error) {
     next(error);

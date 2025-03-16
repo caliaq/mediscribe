@@ -1,7 +1,7 @@
 import Patient from "../models/patient";
 
-const getPatients = async () => {
-  const patients = await Patient.find();
+const getPatientsByDoctor = async (doctorId: string) => {
+  const patients = await Patient.find({ doctorId });
   return patients;
 };
 
@@ -27,7 +27,7 @@ const deletePatient = async (id: string) => {
 };
 
 export default {
-  getPatients,
+  getPatientsByDoctor,
   getPatient,
   createPatient,
   updatePatient,

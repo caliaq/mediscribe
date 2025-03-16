@@ -18,7 +18,6 @@ const createRecord = async (data: any) => {
 
 const updateRecord = async (id: string, data: any) => {
   const record = await Record.findByIdAndUpdate(id, data, { new: true });
-
   return record;
 };
 
@@ -26,7 +25,7 @@ const deleteRecord = async (id: string) => {
   await Record.findByIdAndDelete(id);
 };
 
-const getRecordsByDoctor = async (patientId: string) => {
+const getRecordsByPatient = async (patientId: string) => {
   const records = await Record.find({ patientId });
   return records;
 };
@@ -37,5 +36,5 @@ export default {
   createRecord,
   updateRecord,
   deleteRecord,
-  getRecordsByDoctor,
+  getRecordsByPatient,
 };

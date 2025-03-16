@@ -32,28 +32,14 @@ const addRecording = async (
 
     const { correctedText } = request.data;
 
-    const record = await recordsService.createRecord({
+    await recordsService.createRecord({
       patientId: body.patientId,
       data: correctedText,
       doctorId: (req as IReq).doctorId,
-      filePath,
+      summary: "To do",
     });
 
-    res.json({ success: true, data: record });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getRecording = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const record = await recordsService.getRecord(id);
-    res.send(record);
+    res.json({ success: true });
   } catch (error) {
     next(error);
   }
@@ -61,5 +47,4 @@ const getRecording = async (
 
 export default {
   addRecording,
-  getRecording,
 };

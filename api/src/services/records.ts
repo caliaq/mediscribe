@@ -1,5 +1,4 @@
 import Record from "../models/record";
-import s3 from "./aws";
 
 const getRecords = async () => {
   const records = await Record.find();
@@ -7,12 +6,8 @@ const getRecords = async () => {
 };
 
 const getRecord = async (id: string) => {
-  const record = await Record.findById(id).select("filePath");
-
-  if (record) {
-    s3.getFile(record.filePath);
-    return record;
-  }
+  const record = await Record.findById(id).select("-_id");
+  return record;
 };
 
 const createRecord = async (data: any) => {
